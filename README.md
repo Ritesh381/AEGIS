@@ -4,56 +4,43 @@
 
 ---
 
-## What is AEGIS?
+## 🎯 Project Overview & Strategy
 
-AEGIS is an AI-powered legal intelligence system that goes beyond simple contract summarization. It uses a **multi-agent adversarial debate** to analyze legal documents from multiple expert perspectives, identify risky clauses, simulate real-world consequences, and generate actionable questions you should ask before signing.
+### 1. Chosen Vertical: LegalTech & Contract Intelligence
+We selected the **Legal & Contract Intelligence** vertical. Standard legal support is prohibitively expensive, slow, and opaque for freelancers, small business owners, tenants, and employees. Most automated legal review systems simply scan for standard keywords. AEGIS elevates this by performing deep, context-aware risk analysis using structured agent workflows, demystifying the "legalese" into understandable, everyday scenarios.
 
-It's designed for anyone who signs contracts — freelancers, employees, tenants, founders — and wants to understand what they're agreeing to without hiring a lawyer.
+### 2. Approach & Adversarial Debate Logic
+Single-agent LLM reasoning often suffers from confirmation bias and fails to look at contracts critically. Real-world contract review is collaborative and adversarial. 
 
-### Key Insight
+AEGIS simulates a **live legal team debate** utilizing three specific agent personas:
+*   **User Advocate (The Defender)**: Analyzes the document strictly to look out for your interests. Flags unfair liabilities, non-competes, and broad IP transfers.
+*   **Strict Judge (The Skeptic)**: Analyzes structure, undefined terms, missing termination timelines, logical loopholes, and ambiguities.
+*   **Opposing Counsel (The Adversary)**: Simulates the other party's perspective. It specifically looks for ways a clause could be legally weaponized or exploited against you in court.
 
-Most contract review tools just highlight keywords. AEGIS simulates a **legal team debating your contract** — a User Advocate, a Strict Judge, and an Opposing Counsel — then synthesizes their arguments into a clear risk report with specific questions you should raise during negotiation.
+#### The Three-Round Debate Engine:
+1.  **Phase 1: Deep Review & Flagging**: Each agent autonomously extracts and flags critical clauses based on their persona constraints.
+2.  **Phase 2: Adversarial Cross-Examination**: The agents challenge each other's interpretations in a simulated debate panel.
+3.  **Phase 3: Synthesis & Verdict**: The consensus is structured into a unified JSON format mapping risk categories, confidence metrics, and everyday scenarios.
 
----
+### 3. How the Solution Works
+1.  **Multimodal Upload**: Users upload any PDF, Word document, TXT, CSV, or raw image (OCR processed).
+2.  **SSE Streaming Pipeline**: The server initiates the multi-agent debate and streams status updates (`Upload` ➔ `OCR` ➔ `Debate Engine` ➔ `Executive Report`) in real-time to the browser via Server-Sent Events (SSE).
+3.  **Synthesized Dashboard**: The user is presented with:
+    *   An overall calculated **Risk Score** (0-100) and **Risk Profile** (Low to Critical).
+    *   Flagged clauses with plain-English consequences ("What Could Happen").
+    *   **Actionable Questions**: Custom questions to ask oneself and specific clauses to raise with the counterparty during negotiation.
+    *   **Actionable Data Exports**: Easy one-click download as JSON or formatted text reports.
+4.  **Anonymized Reinforcement**: Users can submit feedback for each assessed risk, which stores anonymous embeddings for offline evaluation.
 
-## How It Works
-
-### 1. Upload Any Document
-Upload a contract in any format — **PDF, DOCX, TXT, CSV, images** — up to 50MB. AEGIS uses Gemini's native multimodal capabilities to extract text, so even scanned documents and photos work.
-
-### 2. Multi-Agent Debate Analysis
-Behind the scenes, three AI agents with distinct legal personas analyze your contract:
-
-| Agent | Role | What It Does |
-|-------|------|-------------|
-| **User Advocate** | Your defender | Finds clauses that are harmful, unfair, or overly restrictive to the signer |
-| **Strict Judge** | The skeptic | Detects ambiguity, contradictions, undefined terms, and logical flaws |
-| **Opposing Counsel** | The adversary | Simulates the counterparty's perspective — how clauses could be exploited against you |
-
-The agents debate in **three rounds**:
-1. **Independent Analysis** — Each agent reviews the contract and flags risky clauses
-2. **Cross-Examination** — Agents challenge each other's findings
-3. **Consensus & Scoring** — Final risk scores, scenarios, and questions are synthesized
-
-### 3. Risk Dashboard
-After the debate, you get a visual risk report:
-- **Overall Risk Score** (0–100) with animated gauge
-- **Risk Profile** — Low, Moderate, High, or Critical
-- **Flagged Clauses** sorted by severity, each with:
-  - The exact problematic text
-  - Each agent's argument about why it's risky
-  - A plain-language "what could happen" scenario
-  - Actionable questions to ask yourself and the other party
-
-### 4. Actionable Questions
-AEGIS doesn't just tell you what's wrong — it tells you **what to do about it**:
-- **Self-directed questions**: Things to ask yourself before signing
-- **Counterparty questions**: Specific demands and clarifications to raise with the other party
-
-### 5. Anonymized Feedback Loop
-Users can rate each flagged clause as "Accurate", "Overstated", or "Missed". This feedback is anonymized and stored as embeddings to improve future analysis — making AEGIS smarter with every review.
+### 4. Assumptions & Design Decisions
+*   **Optional Authentication / Zero Friction**: To ensure frictionless testing and allow automated reviewer bots to examine the site instantly, Firebase Authentication is completely optional. If a user signs in, their contract history is persisted. If not, they are granted guest access immediately with full feature accessibility.
+*   **Privacy-First Document Lifecycles**: Raw contract documents are kept in memory and never persisted. Only the synthesized risk metadata report is saved to Firestore.
+*   **Multimodal Capability**: Assumes all image uploads (PNG/JPG) are converted using Gemini's native OCR abilities.
+*   **Non-Advisory Informational Scope**: AEGIS is strictly an informational tool to prepare signers for negotiation. It does not replace formal legal counsel (backed by explicit UI disclaimers).
+*   **Multi-Model Orchestration**: Assumes backend processes run on rapid-throughput models (`gemini-2.5-flash` or `gemini-3-flash`) for low latency during streaming debates.
 
 ---
+
 
 ## System Architecture
 
