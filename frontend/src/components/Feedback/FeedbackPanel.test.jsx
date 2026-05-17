@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import FeedbackPanel from '../components/Feedback/FeedbackPanel';
+import FeedbackPanel from './FeedbackPanel';
 
 // Mock the API call
-vi.mock('../services/api', () => ({
+vi.mock('../../services/api', () => ({
   submitFeedback: vi.fn(() => Promise.resolve()),
 }));
 

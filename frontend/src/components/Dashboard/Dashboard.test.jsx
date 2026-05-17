@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import Dashboard from '../components/Dashboard/Dashboard';
+import Dashboard from './Dashboard';
 
 const mockAnalysis = {
   overall_risk_score: 68,

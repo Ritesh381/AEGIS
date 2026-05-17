@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import RiskGauge from '../components/RiskGauge/RiskGauge';
+import RiskGauge from './RiskGauge';
 
 describe('RiskGauge', () => {
   it('renders with score and profile', () => {
