@@ -52,7 +52,7 @@ export async function startAnalysis(file) {
  * Starts a streaming analysis via SSE.
  * Returns an EventSource-like interface.
  */
-export function startStreamingAnalysis(file, onChunk, onComplete, onError) {
+export function startStreamingAnalysis(file, onChunk, onComplete, onError, onStatus) {
   return new Promise(async (resolve) => {
     const token = await getIdToken();
     const formData = new FormData();
@@ -95,6 +95,8 @@ export function startStreamingAnalysis(file, onChunk, onComplete, onError) {
                 if (data.type === 'started') {
                   analysisId = data.analysisId;
                   resolve(analysisId);
+                } else if (data.type === 'status') {
+                  onStatus?.(data.phase, data.message);
                 } else if (data.type === 'chunk') {
                   onChunk?.(data.content);
                 } else if (data.type === 'complete') {

@@ -10,9 +10,17 @@ import { db } from '../config/firebase.js';
  * 4. (Optional) Stream results via SSE.
  */
 export async function analyzeContract(fileBuffer, mimeType, fileName, userId, analysisId, res) {
+  // Helper to send SSE status updates
+  const sendStatus = (phase, message) => {
+    if (res && !res.writableEnded) {
+      res.write(`data: ${JSON.stringify({ type: 'status', phase, message })}\n\n`);
+    }
+  };
+
   try {
     // Update status to "extracting"
     await updateStatus(analysisId, 'extracting', 'Extracting text from document...');
+    sendStatus('extracting', 'Extracting text from document...');
 
     // Step 1: Extract text using Gemini multimodal
     let contractText;
@@ -29,8 +37,11 @@ export async function analyzeContract(fileBuffer, mimeType, fileName, userId, an
       return null;
     }
 
+    console.log(`📄 Extracted ${contractText.length} characters from ${fileName}`);
+
     // Update status to "debating"
     await updateStatus(analysisId, 'debating', 'AI agents are analyzing clauses...');
+    sendStatus('debating', 'AI agents are debating your contract...');
 
     // Step 2: Run the simulated debate
     if (res) {

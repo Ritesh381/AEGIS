@@ -66,6 +66,11 @@ export default function ClauseCard({ clause, analysisId, index, defaultExpanded 
           <span className={`badge ${getBadgeClass(clause.risk_score)}`}>
             {clause.risk_score} • {getProfileLabel(clause.risk_score)}
           </span>
+          {clause.confidence != null && (
+            <span className="clause-card__confidence" title="AI Confidence">
+              {(clause.confidence * 100).toFixed(0)}%
+            </span>
+          )}
           {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
         </div>
       </button>

@@ -4,6 +4,23 @@
   padding-bottom: var(--space-8);
 }
 
+/* ── Top Bar ────────────────────────────────── */
+
+.dashboard__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.dashboard__export-group {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
 /* ── Hero ────────────────────────────────────── */
 
 .dashboard__hero {
@@ -89,6 +106,82 @@
 .dashboard__disclaimer svg {
   flex-shrink: 0;
   margin-top: 1px;
+}
+
+/* ── Category Breakdown ──────────────────────── */
+
+.dashboard__categories {
+  margin-top: var(--space-6);
+  overflow: hidden;
+}
+
+.dashboard__categories-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.dashboard__categories-header:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+.dashboard__categories-body {
+  padding: 0 var(--space-5) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.dashboard__category-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.dashboard__category-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+}
+
+.dashboard__category-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--text-primary);
+}
+
+.dashboard__category-count {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.dashboard__category-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.dashboard__category-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dashboard__category-score {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  min-width: 28px;
+  text-align: right;
 }
 
 /* ── Clauses ─────────────────────────────────── */
@@ -215,6 +308,35 @@
   opacity: 0.7;
 }
 
+/* ── Question Severity Badges ─────────────── */
+
+.dashboard__question-severity {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: var(--space-2);
+  vertical-align: middle;
+}
+
+.severity-critical {
+  background: rgba(244, 63, 94, 0.15);
+  color: var(--risk-critical);
+}
+
+.severity-important {
+  background: rgba(249, 115, 22, 0.15);
+  color: var(--risk-high);
+}
+
+.severity-low {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--risk-low);
+}
+
 /* ── Responsive ──────────────────────────────── */
 
 @media (max-width: 768px) {
@@ -227,5 +349,18 @@
 
   .dashboard__stats {
     justify-content: center;
+  }
+
+  .dashboard__topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard__export-group {
+    width: 100%;
+  }
+
+  .dashboard__category-info {
+    min-width: 100px;
   }
 }
