@@ -1,0 +1,104 @@
+.home-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Live Status ─────────────────────────────── */
+
+.home-page__status {
+  max-width: 700px;
+  margin: var(--space-8) auto 0;
+}
+
+.home-page__status-card {
+  padding: var(--space-6);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.home-page__status-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.home-page__status-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--accent-cyan);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.home-page__status-text {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--accent-cyan);
+}
+
+.home-page__stream {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: var(--space-4);
+  background: rgba(0,0,0,0.4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+}
+
+.home-page__stream-text {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+}
+
+/* ── Steps ───────────────────────────────────── */
+
+.home-page__status-steps {
+  display: flex;
+  gap: var(--space-6);
+}
+
+.home-page__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.home-page__step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
+}
+
+.home-page__step--done .home-page__step-dot {
+  background: var(--accent-emerald);
+  border-color: var(--accent-emerald);
+}
+
+.home-page__step--done {
+  color: var(--accent-emerald);
+}
+
+.home-page__step--active .home-page__step-dot {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.home-page__step--active {
+  color: var(--accent-cyan);
+}
+
+@media (max-width: 640px) {
+  .home-page__status-steps {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}

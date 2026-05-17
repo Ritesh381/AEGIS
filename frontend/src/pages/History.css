@@ -1,0 +1,137 @@
+.history-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.history-page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-8);
+  gap: var(--space-4);
+}
+
+.history-page__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+}
+
+.history-page__title svg {
+  color: var(--accent-cyan);
+}
+
+.history-page__desc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-top: var(--space-2);
+}
+
+.history-page__loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.history-page__empty {
+  text-align: center;
+  padding: var(--space-16) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.history-page__empty-icon {
+  color: var(--text-muted);
+}
+
+.history-page__empty h3 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.history-page__empty p {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-2);
+}
+
+.history-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ── History Card ────────────────────────────── */
+
+.history-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  cursor: pointer;
+  gap: var(--space-4);
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  color: inherit;
+  width: 100%;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.history-card:hover {
+  background: rgba(0, 220, 255, 0.03);
+  border-color: rgba(0, 220, 255, 0.15);
+}
+
+.history-card:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.history-card__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  flex: 1;
+}
+
+.history-card__icon {
+  color: var(--accent-cyan);
+  flex-shrink: 0;
+}
+
+.history-card__name {
+  font-weight: 600;
+  font-size: var(--text-sm);
+  max-width: 350px;
+}
+
+.history-card__date {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.history-card__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.history-card__score {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.history-card__arrow {
+  color: var(--text-muted);
+}
