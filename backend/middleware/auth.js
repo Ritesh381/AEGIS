@@ -4,6 +4,7 @@ const isDevMode = () => process.env.DEV_MODE === 'true';
 
 /**
  * Firebase Auth middleware — verifies the ID token from the Authorization header.
+ * Authentication is OPTIONAL: unauthenticated requests proceed as 'anonymous'.
  * In DEV_MODE, bypasses auth and sets a mock user for local testing.
  */
 export const authenticateUser = async (req, res, next) => {
@@ -17,8 +18,11 @@ export const authenticateUser = async (req, res, next) => {
   }
 
   const header = req.headers.authorization;
-  if (!header || !header.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Missing or invalid Authorization header' });
+
+  // No token provided — allow as anonymous guest
+  if (!header || !header.startsWith('Bearer ') || header === 'Bearer null' || header === 'Bearer undefined') {
+    req.user = { uid: 'anonymous', email: null };
+    return next();
   }
 
   const idToken = header.split('Bearer ')[1];
@@ -28,7 +32,9 @@ export const authenticateUser = async (req, res, next) => {
     req.user = decodedToken;
     next();
   } catch (error) {
-    console.error('Auth error:', error.message);
-    return res.status(401).json({ error: 'Invalid or expired token' });
+    // Token is invalid/expired — still allow as anonymous rather than blocking
+    console.warn('Auth token invalid, proceeding as anonymous:', error.message);
+    req.user = { uid: 'anonymous', email: null };
+    next();
   }
 };

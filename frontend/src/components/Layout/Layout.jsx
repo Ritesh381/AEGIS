@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { logout, DEV_MODE } from '../../services/firebase';
-import { Shield, Upload, BarChart3, LogOut, Menu, X } from 'lucide-react';
+import { Shield, Upload, BarChart3, LogOut, LogIn, Menu, X } from 'lucide-react';
 import './Layout.css';
 
 export default function Layout({ children }) {
@@ -17,7 +17,7 @@ export default function Layout({ children }) {
     } else {
       await logout();
     }
-    navigate('/login');
+    navigate('/');
   };
 
   const navItems = [
@@ -40,44 +40,50 @@ export default function Layout({ children }) {
             </span>
           </Link>
 
-          {user && (
-            <>
-              <nav className={`header__nav ${mobileMenuOpen ? 'header__nav--open' : ''}`}>
-                {navItems.map(({ path, label, icon: Icon }) => (
-                  <Link
-                    key={path}
-                    to={path}
-                    id={`nav-${label.toLowerCase()}`}
-                    className={`header__nav-link ${location.pathname === path ? 'header__nav-link--active' : ''}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Icon size={16} />
-                    {label}
-                  </Link>
-                ))}
-              </nav>
+          {/* Nav links — always visible */}
+          <nav className={`header__nav ${mobileMenuOpen ? 'header__nav--open' : ''}`}>
+            {navItems.map(({ path, label, icon: Icon }) => (
+              <Link
+                key={path}
+                to={path}
+                id={`nav-${label.toLowerCase()}`}
+                className={`header__nav-link ${location.pathname === path ? 'header__nav-link--active' : ''}`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Icon size={16} />
+                {label}
+              </Link>
+            ))}
+          </nav>
 
-              <div className="header__actions">
+          <div className="header__actions">
+            {user ? (
+              <>
                 <div className="header__user">
                   <div className="header__avatar">
-                    {user.email?.[0]?.toUpperCase() || 'U'}
+                    {user.email?.[0]?.toUpperCase() || 'G'}
                   </div>
-                  <span className="header__email truncate">{user.email}</span>
+                  <span className="header__email truncate">{user.email || 'Guest'}</span>
                 </div>
                 <button className="btn btn-ghost btn-sm" onClick={handleLogout} id="btn-logout">
                   <LogOut size={16} />
                 </button>
-              </div>
+              </>
+            ) : (
+              <Link to="/login" className="btn btn-secondary btn-sm" id="btn-signin">
+                <LogIn size={16} />
+                Sign In
+              </Link>
+            )}
+          </div>
 
-              <button
-                className="header__mobile-toggle btn btn-ghost"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label="Toggle menu"
-              >
-                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
-            </>
-          )}
+          <button
+            className="header__mobile-toggle btn btn-ghost"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </header>
 

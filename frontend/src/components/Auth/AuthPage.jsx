@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginWithEmail, registerWithEmail, loginWithGoogle, DEV_MODE } from '../../services/firebase';
 import { useAuth } from '../../hooks/useAuth';
-import { Shield, Mail, Lock, Eye, EyeOff, Zap } from 'lucide-react';
+import { Shield, Mail, Lock, Eye, EyeOff, Zap, ArrowRight } from 'lucide-react';
 import './Auth.css';
 
 export default function AuthPage() {
@@ -13,7 +13,13 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { devLogin } = useAuth();
+  const { user, devLogin } = useAuth();
+
+  // If already logged in, redirect to home
+  if (user) {
+    navigate('/', { replace: true });
+    return null;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +28,6 @@ export default function AuthPage() {
 
     try {
       if (DEV_MODE) {
-        // Dev mode — skip Firebase, just set user locally
         devLogin(email || 'dev@aegis.local');
         navigate('/');
         return;
@@ -86,6 +91,16 @@ export default function AuthPage() {
           </p>
         </div>
 
+        {/* Continue as Guest — prominent */}
+        <Link to="/" className="btn btn-primary btn-lg auth-card__submit" id="btn-guest" style={{ marginBottom: 'var(--space-3)' }}>
+          <ArrowRight size={18} />
+          Continue as Guest
+        </Link>
+
+        <div className="auth-card__divider">
+          <span>or sign in to save history</span>
+        </div>
+
         {DEV_MODE && (
           <div className="auth-card__dev-banner animate-fade-in">
             <Zap size={14} />
@@ -101,7 +116,7 @@ export default function AuthPage() {
 
         {DEV_MODE && (
           <button
-            className="btn btn-primary btn-lg auth-card__submit"
+            className="btn btn-secondary btn-lg auth-card__submit"
             onClick={handleDevQuickLogin}
             id="btn-dev-login"
             style={{ marginBottom: 'var(--space-4)' }}

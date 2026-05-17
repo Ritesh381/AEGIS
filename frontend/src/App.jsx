@@ -1,74 +1,35 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './hooks/useAuth';
+import { AuthProvider } from './hooks/useAuth';
 import Layout from './components/Layout/Layout';
 import AuthPage from './components/Auth/AuthPage';
 import HomePage from './pages/Home';
 import HistoryPage from './pages/History';
-// import MonitorList from './components/Monitor/MonitorList'; // Hidden for now
-
-function ProtectedRoute({ children }) {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'var(--bg-primary)',
-      }}>
-        <div className="animate-spin" style={{ fontSize: '2rem' }}>🛡️</div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <Layout>{children}</Layout>;
-}
-
-function PublicRoute({ children }) {
-  const { user, loading } = useAuth();
-
-  if (loading) return null;
-  if (user) return <Navigate to="/" replace />;
-
-  return children;
-}
 
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/login"
-            element={
-              <PublicRoute>
-                <AuthPage />
-              </PublicRoute>
-            }
-          />
+          {/* Login page — optional, standalone */}
+          <Route path="/login" element={<AuthPage />} />
+
+          {/* All main routes are public — wrapped in Layout */}
           <Route
             path="/"
             element={
-              <ProtectedRoute>
+              <Layout>
                 <HomePage />
-              </ProtectedRoute>
+              </Layout>
             }
           />
           <Route
             path="/history"
             element={
-              <ProtectedRoute>
+              <Layout>
                 <HistoryPage />
-              </ProtectedRoute>
+              </Layout>
             }
           />
-          {/* Monitors route hidden for now */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
