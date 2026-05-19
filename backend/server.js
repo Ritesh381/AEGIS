@@ -10,17 +10,41 @@ import monitorRoutes from "./routes/monitors.js";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Trust reverse proxy (Vercel, Cloud Run, Cloudflare, etc.) to get correct client IP
+app.set("trust proxy", 1);
+
 // ── Global Middleware ──────────────────────────────────────────────
-app.use(
-  cors({
-    origin: [
-      process.env.FRONTEND_URL,
-      "http://localhost:5173",
-      "https://aegis-corporate.vercel.app",
-    ],
-    credentials: true,
-  }),
-);
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+  "https://aegis-corporate.vercel.app",
+].filter(Boolean);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+    if (!origin) return callback(null, true);
+
+    const normalizedOrigin = origin.trim().replace(/\/$/, "");
+    const isAllowed = allowedOrigins.some((allowed) => {
+      const normalizedAllowed = allowed.trim().replace(/\/$/, "");
+      return normalizedAllowed === normalizedOrigin;
+    }) || normalizedOrigin.endsWith(".vercel.app"); // Whitelist all Vercel domains/previews
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`🛡️ CORS blocked request from unauthorized origin: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200, // Handle Vercel / browser / proxy preflight status quirks
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // Explicitly handle preflight OPTIONS for all routes
+
 app.use(express.json({ limit: "1mb" }));
 app.use(generalLimiter);
 
